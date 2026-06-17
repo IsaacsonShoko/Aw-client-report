@@ -1,7 +1,12 @@
 /* CSS exclusively for PDF generation */
-@page {
+@page sacs {
     size: letter landscape;
-    margin: 0; /* Full bleed */
+    margin: 0;
+}
+
+@page tcc {
+    size: letter portrait;
+    margin: 0;
 }
 
 body {
@@ -9,23 +14,32 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background-color: #ffffff;
+    color: #161A1D;
+}
+
+body.sacs-report {
+    page: sacs;
     width: 11in;
     height: 8.5in;
     position: relative;
-    background-color: #ffffff;
+}
+
+body.tcc-report {
+    page: tcc;
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.45in;
 }
 
 /* Common Header */
 .report-header {
-    position: absolute;
-    top: 0.5in;
-    left: 0.5in;
-    right: 0.5in;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #173A5E;
     padding-bottom: 0.25in;
+    margin-bottom: 0.3in;
 }
 
 .report-header h1 {
@@ -42,11 +56,10 @@ body {
 
 /* SACS Specific */
 .sacs-diagram {
-    position: absolute;
-    top: 2in;
-    left: 1in;
-    right: 1in;
-    bottom: 1in;
+    position: relative;
+    width: 9in;
+    height: 4.8in;
+    margin: 1.0in auto 0;
 }
 
 .bubble {
@@ -62,36 +75,56 @@ body {
 
 .bubble-inflow {
     background-color: #16A34A; /* Green */
-    width: 3in;
-    height: 3in;
-    left: 0;
-    top: 1in;
+    width: 2.45in;
+    height: 2.45in;
+    left: 0.1in;
+    top: 1.45in;
 }
 
 .bubble-outflow {
     background-color: #DC2626; /* Red */
-    width: 3in;
-    height: 3in;
-    left: 3.5in;
-    top: 1in;
+    width: 2.45in;
+    height: 2.45in;
+    left: 3.275in;
+    top: 1.45in;
 }
 
 .bubble-reserve {
     background-color: #2E6195; /* Blue */
-    width: 2.5in;
-    height: 2.5in;
-    right: 0;
-    top: 1.25in;
+    width: 2.45in;
+    height: 2.45in;
+    left: 6.45in;
+    top: 1.45in;
 }
 
 .bubble .label {
-    font-size: 18pt;
+    font-size: 15pt;
     font-weight: bold;
+    line-height: 1.1;
+    max-width: 1.9in;
 }
 
 .bubble .value {
-    font-size: 24pt;
-    margin-top: 0.2in;
+    font-size: 20pt;
+    font-weight: bold;
+    margin-top: 0.12in;
+    line-height: 1.05;
+}
+
+.bubble-reserve .label {
+    font-size: 13pt;
+    max-width: 1.8in;
+}
+
+.bubble-reserve .value {
+    font-size: 18pt;
+}
+
+.reserve-target {
+    font-size: 10pt;
+    line-height: 1.15;
+    margin-top: 0.08in;
+    max-width: 1.7in;
 }
 
 /* Connecting arrows drawn with CSS. The diagram is fixed-position so these are
@@ -117,95 +150,90 @@ body {
 
 /* Inflow (right edge x=3in) -> Outflow (left edge x=3.5in), on the center line. */
 .arrow-in-out {
-    left: 3in;
-    top: 2.5in;
-    width: 0.5in;
+    left: 2.63in;
+    top: 2.67in;
+    width: 0.64in;
 }
 
 /* Small X marker sitting on the Inflow -> Outflow arrow. */
 .arrow-x {
     position: absolute;
-    left: 0.14in;
-    top: -0.22in;
+    left: 50%;
+    top: -0.23in;
+    transform: translateX(-50%);
     font-size: 22pt;
     font-weight: bold;
     line-height: 1;
     color: #DC2626;
     background-color: #ffffff;
-    padding: 0 0.02in;
+    padding: 0 0.03in;
 }
 
 /* Excess flows from Outflow into the Private Reserve bubble (into the blue). */
 .arrow-into-reserve {
-    left: 6.3in;
-    top: 2.5in;
-    width: 0.8in;
+    left: 5.805in;
+    top: 2.67in;
+    width: 0.64in;
 }
 
 /* Monthly Excess figure, placed between Outflow and Private Reserve. */
 .sacs-excess {
     position: absolute;
-    top: 1.15in;
-    left: 5.6in;
-    width: 1.8in;
+    top: 1.1in;
+    left: 5.48in;
+    width: 1.28in;
     text-align: center;
     color: #173A5E;
     background-color: #ffffff;
     border: 2px solid #173A5E;
     border-radius: 6px;
-    padding: 0.1in 0;
+    padding: 0.08in 0.04in;
 }
 
 .sacs-excess .excess-label {
-    font-size: 12pt;
+    font-size: 10pt;
     font-weight: bold;
 }
 
 .sacs-excess .excess-value {
-    font-size: 20pt;
+    font-size: 15pt;
     font-weight: bold;
     margin-top: 0.05in;
 }
 
 /* TCC Specific */
 .tcc-layout {
-    position: absolute;
-    top: 1.5in;
-    left: 0.5in;
-    right: 0.5in;
-    bottom: 0.5in;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto 1fr;
-    gap: 0.2in;
+    display: block;
+    width: 100%;
 }
 
 .tcc-section {
     border: 1px solid #E3E6EA;
     border-radius: 8px;
-    padding: 0.15in;
-    position: relative;
-    /* Allow sections to shrink within the fixed-height layout instead of
-       pushing content past the bottom of the letter page. */
-    min-height: 0;
-    overflow: hidden;
+    padding: 0.16in;
+    margin-bottom: 0.16in;
+    display: block;
+    overflow: visible;
+    width: 100%;
+    box-sizing: border-box;
+    page-break-inside: avoid;
 }
 
 .tcc-section h2 {
     color: #173A5E;
     margin-top: 0;
-    font-size: 16pt;
+    font-size: 15pt;
     border-bottom: 1px solid #E3E6EA;
     padding-bottom: 0.1in;
+    margin-bottom: 0.12in;
 }
 
 .tcc-grid {
-    display: grid;
-    /* Auto-fill compact columns so high account counts (up to six per section)
-       pack into more, smaller bubbles instead of overflowing the fixed page. */
-    grid-template-columns: repeat(auto-fill, minmax(1.3in, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.08in;
-    margin-top: 0.1in;
+    margin-top: 0.08in;
+    align-items: stretch;
 }
 
 .account-bubble {
@@ -214,13 +242,16 @@ body {
     border-radius: 4px;
     padding: 0.07in;
     text-align: center;
-    min-width: 0;
+    width: 1.65in;
+    min-height: 0.82in;
+    box-sizing: border-box;
     overflow: hidden;
 }
 
 .account-bubble .type {
     font-size: 9pt;
     color: #6B7280;
+    line-height: 1.15;
 }
 
 .account-bubble .balance {
@@ -251,14 +282,30 @@ body {
     color: white;
     padding: 0.1in;
     border-radius: 4px;
-    text-align: center;
+    text-align: left;
     margin-bottom: 0.1in;
+    font-size: 10pt;
+    line-height: 1.2;
 }
 
 .liabilities-section {
-    grid-column: 1 / -1;
     border-color: #DC2626;
 }
+
 .liabilities-section h2 {
     color: #DC2626;
+}
+
+.grand-total-bar {
+    background-color: #173A5E;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 0.18in 0.22in;
+    text-align: center;
+    font-size: 18pt;
+    font-weight: bold;
+    margin: 0.16in 0;
+    width: 100%;
+    box-sizing: border-box;
+    page-break-inside: avoid;
 }

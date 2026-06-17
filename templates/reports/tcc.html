@@ -5,7 +5,7 @@
     <title>TCC Report</title>
     {# Stylesheet is supplied to WeasyPrint via the stylesheets= parameter (loaded from disk). #}
 </head>
-<body>
+<body class="tcc-report">
     <div class="report-header">
         <h1>Total Client Chart (TCC)</h1>
         <div class="meta">
@@ -23,7 +23,7 @@
                 Age {{ calculate_age(person.date_of_birth, report.report_date) }} | 
                 SSN: ***-**-{{ person.ssn_last_four }}
             </div>
-            <h2>Retirement Accounts</h2>
+            <h2>{{ person.first_name }} Retirement Accounts</h2>
             <div class="tcc-grid">
                 {% for acc in profile.accounts %}
                     {% if acc.category == 'retirement' and acc.person_id == person.id %}
@@ -77,11 +77,8 @@
             {% endif %}
         </div>
 
-        <!-- Grand Total Net Worth -->
-        <div class="tcc-section" style="grid-column: 1 / -1; background-color: #173A5E; color: white;">
-            <h2 style="color: white; border-bottom: none; margin: 0; text-align: center;">
-                Grand Total Net Worth: ${{ '{:,.0f}'.format(net_worth / 100) }}
-            </h2>
+        <div class="grand-total-bar">
+            Grand Total Net Worth: ${{ '{:,.0f}'.format(net_worth / 100) }}
         </div>
 
         <!-- Liabilities -->

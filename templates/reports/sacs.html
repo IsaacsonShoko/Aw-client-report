@@ -5,7 +5,7 @@
     <title>SACS Report</title>
     {# Stylesheet is supplied to WeasyPrint via the stylesheets= parameter (loaded from disk). #}
 </head>
-<body>
+<body class="sacs-report">
     <div class="report-header">
         <h1>Simple Automated Cash Flow (SACS)</h1>
         <div class="meta">
@@ -28,7 +28,7 @@
         <div class="bubble bubble-reserve">
             <div class="label">Private Reserve</div>
             <div class="value">${{ '{:,.0f}'.format(report.private_reserve_balance_cents / 100) }}</div>
-            <div style="font-size: 12pt; margin-top: 0.1in;">Target: ${{ '{:,.0f}'.format(reserve_target / 100) }}</div>
+            <div class="reserve-target">Target: ${{ '{:,.0f}'.format(reserve_target / 100) }}</div>
         </div>
 
         <!-- Arrow: Inflow -> Outflow, with an X marker on it per the brief -->
