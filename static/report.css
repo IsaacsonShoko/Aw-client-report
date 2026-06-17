@@ -233,6 +233,12 @@ body.tcc-report {
     page-break-inside: avoid;
 }
 
+.tcc-section:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
 .tcc-section h2 {
     color: #173A5E;
     margin-top: 0;

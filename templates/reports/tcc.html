@@ -69,14 +69,16 @@
         <!-- Trust / Home -->
         <div class="tcc-section">
             <h2>Trust / Real Estate</h2>
-            {% if profile.trust %}
-            <div class="account-bubble">
-                <div class="type">{{ profile.trust.property_address }}</div>
-                <div class="balance">${{ '{:,.0f}'.format(report.trust_home_value_cents / 100) }}</div>
+            <div class="tcc-grid">
+                {% if profile.trust %}
+                <div class="account-bubble">
+                    <div class="type">{{ profile.trust.property_address }}</div>
+                    <div class="balance">${{ '{:,.0f}'.format(report.trust_home_value_cents / 100) }}</div>
+                </div>
+                {% else %}
+                <p style="color: #6B7280; text-align: center;">No properties listed</p>
+                {% endif %}
             </div>
-            {% else %}
-            <p style="color: #6B7280; text-align: center;">No properties listed</p>
-            {% endif %}
         </div>
 
         <div class="grand-total-bar">
