@@ -1,5 +1,6 @@
 Flask==3.0.3
 WeasyPrint==62.1
+pydyf==0.11.0  # WeasyPrint 62.1 calls Stream.transform(), removed in pydyf 0.12+
 pytest==8.2.0
 gunicorn==22.0.0
 pymysql==1.1.0
