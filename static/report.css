@@ -68,12 +68,12 @@ body.tcc-report {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    row-gap: 0.08in;
+    row-gap: 0.06in;
     position: absolute;
     text-align: center;
     color: white;
     box-sizing: border-box;
-    padding: 0.24in 0.18in;
+    padding: 0.14in 0.1in;
 }
 
 .bubble-inflow {
@@ -101,25 +101,32 @@ body.tcc-report {
 }
 
 .bubble .label {
-    font-size: 13pt;
+    font-size: 12pt;
     font-weight: bold;
-    line-height: 1.02;
-    max-width: 1.7in;
+    line-height: 1.04;
+    max-width: 1.72in;
     margin: 0;
 }
 
 .bubble .value {
-    font-size: 16pt;
+    font-size: 17pt;
     font-weight: bold;
     line-height: 1;
     margin: 0;
 }
 
+.bubble-reserve {
+    justify-content: flex-start;
+    padding-top: 0.58in;
+    padding-bottom: 0.28in;
+    row-gap: 0.05in;
+}
+
 .reserve-target {
-    font-size: 8.5pt;
-    line-height: 1.05;
+    font-size: 8pt;
+    line-height: 1.08;
     margin: 0;
-    max-width: 1.45in;
+    max-width: 1.42in;
 }
 
 /* Connecting arrows drawn with CSS. The diagram is fixed-position so these are
@@ -205,7 +212,8 @@ body.tcc-report {
 .retirement-sections {
     display: flex;
     gap: 0.1in;
-    margin-bottom: 0.1in;
+    margin-bottom: 0.08in;
+    align-items: stretch;
 }
 
 .retirement-sections .tcc-section {
@@ -216,8 +224,8 @@ body.tcc-report {
 .tcc-section {
     border: 1px solid #E3E6EA;
     border-radius: 8px;
-    padding: 0.1in 0.11in;
-    margin-bottom: 0.1in;
+    padding: 0.08in 0.1in;
+    margin-bottom: 0.08in;
     display: block;
     overflow: visible;
     width: 100%;
@@ -230,25 +238,25 @@ body.tcc-report {
     margin-top: 0;
     font-size: 12pt;
     border-bottom: 1px solid #E3E6EA;
-    padding-bottom: 0.05in;
-    margin-bottom: 0.07in;
+    padding-bottom: 0.04in;
+    margin-bottom: 0.05in;
 }
 
 .tcc-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.05in;
-    margin-top: 0.04in;
-    align-items: stretch;
+    gap: 0.06in;
+    margin-top: 0.03in;
+    align-items: flex-start;
 }
 
 .account-bubble {
-    background-color: #F5F6F8;
-    border: 1px solid #d7dde5;
+    background-color: #f8fafc;
+    border: 1px solid #d1d9e6;
     border-radius: 12px;
-    padding: 0.08in 0.1in;
+    padding: 0.08in 0.11in;
     text-align: center;
-    width: 1.48in;
+    width: 1.42in;
     min-height: 0;
     box-sizing: border-box;
     overflow: hidden;
@@ -256,29 +264,30 @@ body.tcc-report {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    row-gap: 0.03in;
+    row-gap: 0.025in;
+    flex: 0 0 1.42in;
 }
 
 .account-bubble .type {
-    font-size: 7.8pt;
+    font-size: 8pt;
     color: #6B7280;
-    line-height: 1.05;
-    max-width: 1.2in;
+    line-height: 1.08;
+    max-width: 100%;
     margin: 0;
 }
 
 .account-bubble .balance {
-    font-size: 10.5pt;
+    font-size: 11pt;
     font-weight: bold;
     color: #161A1D;
-    line-height: 1;
+    line-height: 1.02;
     margin: 0;
 }
 
 .account-bubble .cash {
     font-size: 7.5pt;
     color: #6B7280;
-    line-height: 1;
+    line-height: 1.05;
     margin: 0;
 }
 
@@ -287,7 +296,7 @@ body.tcc-report {
     padding: 0.06in 0.09in;
     border-radius: 4px;
     text-align: right;
-    margin-top: 0.06in;
+    margin-top: 0.05in;
     font-weight: bold;
     font-size: 10pt;
 }
@@ -295,12 +304,12 @@ body.tcc-report {
 .client-info-bubble {
     background-color: #16A34A; /* Green per PRD */
     color: white;
-    padding: 0.07in 0.09in;
+    padding: 0.06in 0.08in;
     border-radius: 4px;
     text-align: left;
-    margin-bottom: 0.06in;
+    margin-bottom: 0.05in;
     font-size: 8.5pt;
-    line-height: 1.1;
+    line-height: 1.08;
 }
 
 .liabilities-section {
@@ -315,11 +324,11 @@ body.tcc-report {
     background-color: #173A5E;
     color: #ffffff;
     border-radius: 8px;
-    padding: 0.11in 0.16in;
+    padding: 0.1in 0.15in;
     text-align: center;
     font-size: 14pt;
     font-weight: bold;
-    margin: 0.1in 0;
+    margin: 0.08in 0;
     width: 100%;
     box-sizing: border-box;
     page-break-inside: avoid;
