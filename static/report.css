@@ -1,0 +1,177 @@
+/* CSS exclusively for PDF generation */
+@page {
+    size: letter landscape;
+    margin: 0; /* Full bleed */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 11in;
+    height: 8.5in;
+    position: relative;
+    background-color: #ffffff;
+}
+
+/* Common Header */
+.report-header {
+    position: absolute;
+    top: 0.5in;
+    left: 0.5in;
+    right: 0.5in;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #173A5E;
+    padding-bottom: 0.25in;
+}
+
+.report-header h1 {
+    color: #173A5E;
+    margin: 0;
+    font-size: 24pt;
+}
+
+.report-header .meta {
+    text-align: right;
+    color: #6B7280;
+    font-size: 14pt;
+}
+
+/* SACS Specific */
+.sacs-diagram {
+    position: absolute;
+    top: 2in;
+    left: 1in;
+    right: 1in;
+    bottom: 1in;
+}
+
+.bubble {
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    text-align: center;
+    color: white;
+}
+
+.bubble-inflow {
+    background-color: #16A34A; /* Green */
+    width: 3in;
+    height: 3in;
+    left: 0;
+    top: 1in;
+}
+
+.bubble-outflow {
+    background-color: #DC2626; /* Red */
+    width: 3in;
+    height: 3in;
+    left: 3.5in;
+    top: 1in;
+}
+
+.bubble-reserve {
+    background-color: #2E6195; /* Blue */
+    width: 2.5in;
+    height: 2.5in;
+    right: 0;
+    top: 1.25in;
+}
+
+.bubble .label {
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+.bubble .value {
+    font-size: 24pt;
+    margin-top: 0.2in;
+}
+
+/* TCC Specific */
+.tcc-layout {
+    position: absolute;
+    top: 1.5in;
+    left: 0.5in;
+    right: 0.5in;
+    bottom: 0.5in;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto 1fr;
+    gap: 0.2in;
+}
+
+.tcc-section {
+    border: 1px solid #E3E6EA;
+    border-radius: 8px;
+    padding: 0.2in;
+    position: relative;
+}
+
+.tcc-section h2 {
+    color: #173A5E;
+    margin-top: 0;
+    font-size: 16pt;
+    border-bottom: 1px solid #E3E6EA;
+    padding-bottom: 0.1in;
+}
+
+.tcc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.1in;
+    margin-top: 0.1in;
+}
+
+.account-bubble {
+    background-color: #F5F6F8;
+    border: 1px solid #E3E6EA;
+    border-radius: 4px;
+    padding: 0.1in;
+    text-align: center;
+}
+
+.account-bubble .type {
+    font-size: 10pt;
+    color: #6B7280;
+}
+
+.account-bubble .balance {
+    font-size: 14pt;
+    font-weight: bold;
+    color: #161A1D;
+    margin-top: 0.05in;
+}
+
+.summary-box {
+    background-color: #E3E6EA;
+    padding: 0.1in;
+    border-radius: 4px;
+    text-align: right;
+    margin-top: 0.1in;
+    font-weight: bold;
+    font-size: 12pt;
+}
+
+.client-info-bubble {
+    background-color: #16A34A; /* Green per PRD */
+    color: white;
+    padding: 0.1in;
+    border-radius: 4px;
+    text-align: center;
+    margin-bottom: 0.1in;
+}
+
+.liabilities-section {
+    grid-column: 1 / -1;
+    border-color: #DC2626;
+}
+.liabilities-section h2 {
+    color: #DC2626;
+}

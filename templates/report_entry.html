@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Quarterly Report Data Entry</h2>
+    <p><strong>Client:</strong> {{ profile.household_name }} | <strong>Period:</strong> {{ report.report_period }}</p>
+    
+    <div class="grid-2">
+        <div>
+            <form method="POST" id="entry-form">
+                
+                <h3>Static Profile Data (Calculated)</h3>
+                <div class="form-group">
+                    <label>Monthly Salary (Inflow)</label>
+                    <input type="text" value="${{ '{:,.2f}'.format(report.snap_monthly_salary_cents / 100) }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Monthly Expense Budget (Outflow)</label>
+                    <input type="text" value="${{ '{:,.2f}'.format(report.snap_monthly_expense_budget_cents / 100) }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label>SACS Excess (Calculated)</label>
+                    <input type="text" value="${{ '{:,.2f}'.format(excess / 100) }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Reserve Target (Calculated)</label>
+                    <input type="text" value="${{ '{:,.2f}'.format(reserve_target / 100) }}" disabled>
+                </div>
+
+                <h3>Dynamic Balances</h3>
+                <div class="form-group">
+                    <label>Private Reserve Balance ($)</label>
+                    <input type="number" step="0.01" name="private_reserve_balance" class="highlight calc-input" required>
+                </div>
+                
+                {% if profile.trust %}
+                <div class="form-group">
+                    <label>Trust / Home Value: {{ profile.trust.property_address }} ($)</label>
+                    <input type="number" step="0.01" name="trust_home_value" class="highlight calc-input calc-trust" required>
+                </div>
+                {% endif %}
+
+                {% for acc in profile.accounts %}
+                <div class="form-group">
+                    <label>{{ acc.account_type }} (*{{ acc.account_number_last_four }}) Balance ($)</label>
+                    <input type="number" step="0.01" name="account_{{ acc.id }}_balance" class="highlight calc-input calc-account" data-category="{{ acc.category }}" data-person="{{ acc.person_id or '' }}" required>
+                </div>
+                {% if acc.is_investment_account %}
+                <div class="form-group">
+                    <label>{{ acc.account_type }} (*{{ acc.account_number_last_four }}) Cash Balance ($)</label>
+                    <input type="number" step="0.01" name="account_{{ acc.id }}_cash" class="highlight calc-input calc-cash" required>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+                {% for liab in profile.liabilities %}
+                <div class="form-group">
+                    <label>{{ liab.liability_type }} Balance ($)</label>
+                    <input type="number" step="0.01" name="liability_{{ liab.id }}_balance" class="highlight calc-input calc-liability" required>
+                </div>
+                {% endfor %}
+
+                <div class="form-group" style="margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save and Generate PDFs</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Live Totals Panel -->
+        <div>
+            <div class="totals-panel" style="position: sticky; top: 2rem;">
+                <h3>Live Totals Preview</h3>
+                <p class="muted">These calculate automatically as you type to prevent math errors.</p>
+                
+                <table style="margin-top: 1rem;">
+                    <tbody>
+                        {% for person in profile.persons %}
+                        <tr>
+                            <td>{{ person.first_name }} Retirement Total</td>
+                            <td id="live-ret-{{ person.id }}">$0.00</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Non-Retirement Total (Excl. Trust)</td>
+                            <td id="live-non-ret">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Trust Value</td>
+                            <td id="live-trust">$0.00</td>
+                        </tr>
+                        <tr style="font-weight: bold; font-size: 1.1em; border-top: 2px solid var(--brand);">
+                            <td>Grand Total Net Worth</td>
+                            <td id="live-net-worth">$0.00</td>
+                        </tr>
+                        <tr style="color: var(--error); margin-top: 1rem;">
+                            <td>Liabilities Total (Not Subtracted)</td>
+                            <td id="live-liab">$0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='entry.js') }}"></script>
+{% endblock %}

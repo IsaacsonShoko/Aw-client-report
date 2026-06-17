@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Clients</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Household</th>
+                <th>Status</th>
+                <th>Last Report</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.household_name }}</td>
+                <td>{{ client.marital_status | title }}</td>
+                <td>{{ client.last_report_date or 'No reports' }}</td>
+                <td>
+                    <form action="{{ url_for('reports.generate', client_id=client.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">Generate Report</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Report Generated Successfully</h2>
+    <p>Both SACS and TCC reports are ready to download.</p>
+    <div class="grid-2">
+        <a href="{{ url_for('exports.download_sacs', report_id=report_id) }}" class="btn btn-primary" target="_blank">Download SACS PDF</a>
+        <a href="{{ url_for('exports.download_tcc', report_id=report_id) }}" class="btn btn-primary" target="_blank">Download TCC PDF</a>
+    </div>
+</div>
+{% endblock %}

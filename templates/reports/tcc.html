@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TCC Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='report.css', _external=True) }}">
+</head>
+<body>
+    <div class="report-header">
+        <h1>Total Client Chart (TCC)</h1>
+        <div class="meta">
+            <div>{{ profile.household_name }}</div>
+            <div>{{ report.report_period }}</div>
+        </div>
+    </div>
+
+    <div class="tcc-layout">
+        <!-- Retirement Accounts (Per Person) -->
+        {% for person in profile.persons %}
+        <div class="tcc-section">
+            <div class="client-info-bubble">
+                <strong>{{ person.first_name }} {{ person.last_name }}</strong> | 
+                Age {{ calculate_age(person.date_of_birth, report.report_date) }} | 
+                SSN: ***-**-{{ person.ssn_last_four }}
+            </div>
+            <h2>Retirement Accounts</h2>
+            <div class="tcc-grid">
+                {% for acc in profile.accounts %}
+                    {% if acc.category == 'retirement' and acc.person_id == person.id %}
+                    <div class="account-bubble">
+                        <div class="type">{{ acc.account_type }} (*{{ acc.account_number_last_four }})</div>
+                        <div class="balance">${{ '{:,.0f}'.format(balances[acc.id] / 100) }}</div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="summary-box">
+                Total: ${{ '{:,.0f}'.format(ret_totals[person.id] / 100) }}
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Non-Retirement Accounts -->
+        <div class="tcc-section">
+            <h2>Non-Retirement Accounts</h2>
+            <div class="tcc-grid">
+                {% for acc in profile.accounts %}
+                    {% if acc.category == 'non_retirement' %}
+                    <div class="account-bubble">
+                        <div class="type">{{ acc.account_type }} (*{{ acc.account_number_last_four }})</div>
+                        <div class="balance">${{ '{:,.0f}'.format(balances[acc.id] / 100) }}</div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="summary-box">
+                Total: ${{ '{:,.0f}'.format(non_ret_total / 100) }}
+            </div>
+        </div>
+
+        <!-- Trust / Home -->
+        <div class="tcc-section">
+            <h2>Trust / Real Estate</h2>
+            {% if profile.trust %}
+            <div class="account-bubble">
+                <div class="type">{{ profile.trust.property_address }}</div>
+                <div class="balance">${{ '{:,.0f}'.format(report.trust_home_value_cents / 100) }}</div>
+            </div>
+            {% else %}
+            <p style="color: #6B7280; text-align: center;">No properties listed</p>
+            {% endif %}
+        </div>
+
+        <!-- Grand Total Net Worth -->
+        <div class="tcc-section" style="grid-column: 1 / -1; background-color: #173A5E; color: white;">
+            <h2 style="color: white; border-bottom: none; margin: 0; text-align: center;">
+                Grand Total Net Worth: ${{ '{:,.0f}'.format(net_worth / 100) }}
+            </h2>
+        </div>
+
+        <!-- Liabilities -->
+        <div class="tcc-section liabilities-section">
+            <h2>Liabilities (Not subtracted from net worth)</h2>
+            <div class="tcc-grid">
+                {% for liab in profile.liabilities %}
+                <div class="account-bubble" style="border-color: #DC2626;">
+                    <div class="type">{{ liab.liability_type }} ({{ liab.interest_rate }}%)</div>
+                    <div class="balance" style="color: #DC2626;">${{ '{:,.0f}'.format(liab_balances[liab.id] / 100) }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="summary-box" style="background-color: #FEE2E2; color: #DC2626;">
+                Total Liabilities: ${{ '{:,.0f}'.format(liabilities_total / 100) }}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SACS Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='report.css', _external=True) }}">
+</head>
+<body>
+    <div class="report-header">
+        <h1>Simple Automated Cash Flow (SACS)</h1>
+        <div class="meta">
+            <div>{{ profile.household_name }}</div>
+            <div>{{ report.report_period }}</div>
+        </div>
+    </div>
+
+    <div class="sacs-diagram">
+        <div class="bubble bubble-inflow">
+            <div class="label">Inflow</div>
+            <div class="value">${{ '{:,.0f}'.format(report.snap_monthly_salary_cents / 100) }}</div>
+        </div>
+
+        <div class="bubble bubble-outflow">
+            <div class="label">Outflow</div>
+            <div class="value">${{ '{:,.0f}'.format(report.snap_monthly_expense_budget_cents / 100) }}</div>
+        </div>
+
+        <div class="bubble bubble-reserve">
+            <div class="label">Private Reserve</div>
+            <div class="value">${{ '{:,.0f}'.format(report.private_reserve_balance_cents / 100) }}</div>
+            <div style="font-size: 12pt; margin-top: 0.1in;">Target: ${{ '{:,.0f}'.format(reserve_target / 100) }}</div>
+        </div>
+    </div>
+</body>
+</html>

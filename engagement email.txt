@@ -1,0 +1,27 @@
+Hi Isaacson,
+
+My name is Ritchelle and I'm part of the team here at Sagan. You may have previously applied to one of our roles, and that's how we came across your profile. Based on what we saw, we think you could be a great fit for an internal role we're currently hiring for: AI Application Engineer. (https://forms.saganrecruitment.com/t/w4pSWVn52wus)
+
+This is an internal Sagan role focused on building AI-powered applications. The role requires someone who can take a PRD and turn it into a working build, not just plan or strategize, but actually execute. Based on your profile, we think you have exactly what it takes for this.
+
+We have a small test project for you, and I want to be upfront so there are no surprises. You can access the materials here: Google Drive link (https://drive.google.com/drive/folders/13Cve_voX5xn5sW08M7yTwfP9cQwMwJbm?usp=sharing)
+
+Inside you'll find a PRD and a short video walkthrough. This is how projects are typically assigned in this role, so the test mirrors the actual work.
+
+A couple of important notes:
+Please don’t reach out with questions about the project specifics. Part of what we’re evaluating is how you work with the information provided. If there are gaps, use your best judgment and feel free to point them out in your submission.
+Please cap your time at 2 hours. This is not meant to be a full build, just show us how you approach it.
+
+Deadline: 48 hours from when you receive access.
+
+Once done, please send:
+1. A link to what you built
+2. A Loom video (under 2 minutes) walking us through your approach
+
+If this isn't something you're currently open to, no worries at all, we completely understand. If we don't hear back within 48 hours, we'll take that as a pass and move forward with other candidates.
+
+Hoping to hear from you soon!
+
+Best,
+Ritchelle
+Sagan Team
