@@ -6,11 +6,12 @@ import traceback
 
 load_dotenv()
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object('config.Config')
 
-    # Setup basic logging to stdout so it shows up in Railway
+    # Log application errors to stdout so Railway captures the traceback.
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.ERROR)
     app.logger.addHandler(handler)
@@ -29,15 +30,15 @@ def create_app():
 
     @app.errorhandler(Exception)
     def handle_exception(e):
-        # Log the full stack trace to Railway's console
         app.logger.error("Unhandled Exception: %s", str(e))
         app.logger.error(traceback.format_exc())
         return "Internal Server Error (Check Logs)", 500
 
     return app
 
+
 app = create_app()
 
+
 if __name__ == '__main__':
-    app.run(debug=True)# trigger build
-# trigger build
+    app.run(debug=True)
