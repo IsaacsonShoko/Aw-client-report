@@ -30,6 +30,9 @@
                     <div class="account-bubble">
                         <div class="type">{{ acc.account_type }} (*{{ acc.account_number_last_four }})</div>
                         <div class="balance">${{ '{:,.0f}'.format(balances[acc.id] / 100) }}</div>
+                        {% if acc.is_investment_account and cash_balances[acc.id] is not none %}
+                        <div class="cash">Cash: ${{ '{:,.0f}'.format(cash_balances[acc.id] / 100) }}</div>
+                        {% endif %}
                     </div>
                     {% endif %}
                 {% endfor %}
@@ -49,6 +52,9 @@
                     <div class="account-bubble">
                         <div class="type">{{ acc.account_type }} (*{{ acc.account_number_last_four }})</div>
                         <div class="balance">${{ '{:,.0f}'.format(balances[acc.id] / 100) }}</div>
+                        {% if acc.is_investment_account and cash_balances[acc.id] is not none %}
+                        <div class="cash">Cash: ${{ '{:,.0f}'.format(cash_balances[acc.id] / 100) }}</div>
+                        {% endif %}
                     </div>
                     {% endif %}
                 {% endfor %}

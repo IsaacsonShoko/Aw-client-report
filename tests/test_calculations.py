@@ -25,9 +25,11 @@ def test_calculate_reserve_target_no_override():
 def test_calculate_reserve_target_with_override():
     assert calculate_reserve_target(400000, 50000, override_cents=3000000) == 3000000
 
-def test_calculate_reserve_target_floor():
-    Config.RESERVE_FLOOR_CENTS = 100000
-    assert calculate_reserve_target(1000, 0) == 100000
+def test_calculate_reserve_target_no_floor():
+    # The reserve target is no longer clamped to RESERVE_FLOOR_CENTS; the floor
+    # is a per-account minimum balance, not a floor on the reserve target.
+    # 6 * 1000 + 0 = 6000, well below RESERVE_FLOOR_CENTS, and returned as-is.
+    assert calculate_reserve_target(1000, 0) == 6000
 
 def test_calculate_client_retirement_total():
     accounts = [

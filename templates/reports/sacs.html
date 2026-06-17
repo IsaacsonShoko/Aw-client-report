@@ -30,6 +30,20 @@
             <div class="value">${{ '{:,.0f}'.format(report.private_reserve_balance_cents / 100) }}</div>
             <div style="font-size: 12pt; margin-top: 0.1in;">Target: ${{ '{:,.0f}'.format(reserve_target / 100) }}</div>
         </div>
+
+        <!-- Arrow: Inflow -> Outflow, with an X marker on it per the brief -->
+        <div class="sacs-arrow arrow-in-out">
+            <span class="arrow-x">&times;</span>
+        </div>
+
+        <!-- Monthly Excess (Inflow - Outflow), shown between Outflow and Private Reserve -->
+        <div class="sacs-excess">
+            <div class="excess-label">Monthly Excess</div>
+            <div class="excess-value">${{ '{:,.0f}'.format(excess / 100) }}</div>
+        </div>
+
+        <!-- Arrow: excess flows into the Private Reserve bubble -->
+        <div class="sacs-arrow arrow-into-reserve"></div>
     </div>
 </body>
 </html>

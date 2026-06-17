@@ -12,10 +12,11 @@ def calculate_sacs_excess(inflow_cents, outflow_cents):
 
 def calculate_reserve_target(monthly_expenses_cents, insurance_deductibles_cents, override_cents=None):
     if override_cents is not None:
-        return max(override_cents, Config.RESERVE_FLOOR_CENTS)
-    
-    calculated = (6 * monthly_expenses_cents) + insurance_deductibles_cents
-    return max(calculated, Config.RESERVE_FLOOR_CENTS)
+        return override_cents
+
+    # The $1,000 RESERVE_FLOOR_CENTS in the PRD is a per-account minimum balance,
+    # not a floor on the reserve target, so it is not applied here.
+    return (6 * monthly_expenses_cents) + insurance_deductibles_cents
 
 def calculate_client_retirement_total(accounts, balances, person_id):
     """

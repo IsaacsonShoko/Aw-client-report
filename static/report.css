@@ -94,6 +94,79 @@ body {
     margin-top: 0.2in;
 }
 
+/* Connecting arrows drawn with CSS. The diagram is fixed-position so these are
+   placed by absolute coordinates and do not affect bubble layout. */
+.sacs-arrow {
+    position: absolute;
+    height: 0;
+    border-top: 4px solid #173A5E;
+}
+
+/* Right-pointing arrowhead at the end of each arrow line. */
+.sacs-arrow::after {
+    content: "";
+    position: absolute;
+    right: -2px;
+    top: -9px;
+    width: 0;
+    height: 0;
+    border: 9px solid transparent;
+    border-left-color: #173A5E;
+    border-right-width: 0;
+}
+
+/* Inflow (right edge x=3in) -> Outflow (left edge x=3.5in), on the center line. */
+.arrow-in-out {
+    left: 3in;
+    top: 2.5in;
+    width: 0.5in;
+}
+
+/* Small X marker sitting on the Inflow -> Outflow arrow. */
+.arrow-x {
+    position: absolute;
+    left: 0.14in;
+    top: -0.22in;
+    font-size: 22pt;
+    font-weight: bold;
+    line-height: 1;
+    color: #DC2626;
+    background-color: #ffffff;
+    padding: 0 0.02in;
+}
+
+/* Excess flows from Outflow into the Private Reserve bubble (into the blue). */
+.arrow-into-reserve {
+    left: 6.3in;
+    top: 2.5in;
+    width: 0.8in;
+}
+
+/* Monthly Excess figure, placed between Outflow and Private Reserve. */
+.sacs-excess {
+    position: absolute;
+    top: 1.15in;
+    left: 5.6in;
+    width: 1.8in;
+    text-align: center;
+    color: #173A5E;
+    background-color: #ffffff;
+    border: 2px solid #173A5E;
+    border-radius: 6px;
+    padding: 0.1in 0;
+}
+
+.sacs-excess .excess-label {
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.sacs-excess .excess-value {
+    font-size: 20pt;
+    font-weight: bold;
+    margin-top: 0.05in;
+}
+
 /* TCC Specific */
 .tcc-layout {
     position: absolute;
@@ -110,8 +183,12 @@ body {
 .tcc-section {
     border: 1px solid #E3E6EA;
     border-radius: 8px;
-    padding: 0.2in;
+    padding: 0.15in;
     position: relative;
+    /* Allow sections to shrink within the fixed-height layout instead of
+       pushing content past the bottom of the letter page. */
+    min-height: 0;
+    overflow: hidden;
 }
 
 .tcc-section h2 {
@@ -124,8 +201,10 @@ body {
 
 .tcc-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.1in;
+    /* Auto-fill compact columns so high account counts (up to six per section)
+       pack into more, smaller bubbles instead of overflowing the fixed page. */
+    grid-template-columns: repeat(auto-fill, minmax(1.3in, 1fr));
+    gap: 0.08in;
     margin-top: 0.1in;
 }
 
@@ -133,20 +212,28 @@ body {
     background-color: #F5F6F8;
     border: 1px solid #E3E6EA;
     border-radius: 4px;
-    padding: 0.1in;
+    padding: 0.07in;
     text-align: center;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .account-bubble .type {
-    font-size: 10pt;
+    font-size: 9pt;
     color: #6B7280;
 }
 
 .account-bubble .balance {
-    font-size: 14pt;
+    font-size: 12pt;
     font-weight: bold;
     color: #161A1D;
-    margin-top: 0.05in;
+    margin-top: 0.04in;
+}
+
+.account-bubble .cash {
+    font-size: 9pt;
+    color: #6B7280;
+    margin-top: 0.03in;
 }
 
 .summary-box {

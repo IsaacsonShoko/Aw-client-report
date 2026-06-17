@@ -7,6 +7,7 @@ import repository
 from calculations import (
     calculate_age,
     calculate_reserve_target,
+    calculate_sacs_excess,
     calculate_client_retirement_total,
     calculate_non_retirement_total,
     calculate_net_worth,
@@ -70,9 +71,11 @@ def get_report_context(report_id):
     )
 
     acc_balances = {}
+    cash_balances = {}
     report_acc_bals = repository.get_where("report_account_balances", report_id=report_id)
     for rab in report_acc_bals:
         acc_balances[rab["account_id"]] = rab["balance_cents"]
+        cash_balances[rab["account_id"]] = rab.get("cash_balance_cents")
 
     liab_balances = {}
     report_liab_bals = repository.get_where("report_liability_balances", report_id=report_id)
@@ -87,11 +90,22 @@ def get_report_context(report_id):
 
     non_ret_total = calculate_non_retirement_total(profile["accounts"], acc_balances)
 
+    # Net worth is the sum of each spouse's retirement total plus shared totals.
+    # Pass the per-spouse totals explicitly (0 when a spouse is absent).
+    per_spouse_ret_totals = list(ret_totals.values())
+    client_1_ret_total = per_spouse_ret_totals[0] if len(per_spouse_ret_totals) > 0 else 0
+    client_2_ret_total = per_spouse_ret_totals[1] if len(per_spouse_ret_totals) > 1 else 0
+
     net_worth = calculate_net_worth(
-        sum(ret_totals.values()),
-        0,
+        client_1_ret_total,
+        client_2_ret_total,
         non_ret_total,
         report["trust_home_value_cents"],
+    )
+
+    excess = calculate_sacs_excess(
+        report["snap_monthly_salary_cents"],
+        report["snap_monthly_expense_budget_cents"],
     )
 
     liabilities_total = calculate_liabilities_total(profile["liabilities"], liab_balances)
@@ -100,7 +114,9 @@ def get_report_context(report_id):
         "report": report,
         "profile": profile,
         "reserve_target": reserve_target,
+        "excess": excess,
         "balances": acc_balances,
+        "cash_balances": cash_balances,
         "liab_balances": liab_balances,
         "ret_totals": ret_totals,
         "non_ret_total": non_ret_total,
