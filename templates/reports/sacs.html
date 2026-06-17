@@ -16,19 +16,25 @@
 
     <div class="sacs-diagram">
         <div class="bubble bubble-inflow">
-            <div class="label">Inflow</div>
-            <div class="value">${{ '{:,.0f}'.format(report.snap_monthly_salary_cents / 100) }}</div>
+            <div class="bubble-content">
+                <div class="label">Inflow</div>
+                <div class="value">${{ '{:,.0f}'.format(report.snap_monthly_salary_cents / 100) }}</div>
+            </div>
         </div>
 
         <div class="bubble bubble-outflow">
-            <div class="label">Outflow</div>
-            <div class="value">${{ '{:,.0f}'.format(report.snap_monthly_expense_budget_cents / 100) }}</div>
+            <div class="bubble-content">
+                <div class="label">Outflow</div>
+                <div class="value">${{ '{:,.0f}'.format(report.snap_monthly_expense_budget_cents / 100) }}</div>
+            </div>
         </div>
 
         <div class="bubble bubble-reserve">
-            <div class="label">Private Reserve</div>
-            <div class="value">${{ '{:,.0f}'.format(report.private_reserve_balance_cents / 100) }}</div>
-            <div class="reserve-target">Target: ${{ '{:,.0f}'.format(reserve_target / 100) }}</div>
+            <div class="bubble-content">
+                <div class="label">Private Reserve</div>
+                <div class="value">${{ '{:,.0f}'.format(report.private_reserve_balance_cents / 100) }}</div>
+                <div class="reserve-target">Target: ${{ '{:,.0f}'.format(reserve_target / 100) }}</div>
+            </div>
         </div>
 
         <!-- Arrow: Inflow -> Outflow, with an X marker on it per the brief -->

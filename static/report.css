@@ -64,69 +64,62 @@ body.tcc-report {
 
 .bubble {
     border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    row-gap: 0.06in;
     position: absolute;
     text-align: center;
     color: white;
     box-sizing: border-box;
-    padding: 0.14in 0.1in;
+    display: table;
+    width: 2.45in;
+    height: 2.45in;
 }
 
 .bubble-inflow {
     background-color: #16A34A; /* Green */
-    width: 2.45in;
-    height: 2.45in;
     left: 0.1in;
     top: 1.45in;
 }
 
 .bubble-outflow {
     background-color: #DC2626; /* Red */
-    width: 2.45in;
-    height: 2.45in;
     left: 3.275in;
     top: 1.45in;
 }
 
 .bubble-reserve {
     background-color: #2E6195; /* Blue */
-    width: 2.45in;
-    height: 2.45in;
     left: 6.45in;
     top: 1.45in;
+}
+
+.bubble-content {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0.2in;
+    width: 100%;
+    height: 100%;
 }
 
 .bubble .label {
     font-size: 12pt;
     font-weight: bold;
-    line-height: 1.04;
-    max-width: 1.72in;
-    margin: 0;
+    line-height: 1.2;
+    margin: 0 0 0.1in 0;
+    display: block;
 }
 
 .bubble .value {
     font-size: 17pt;
     font-weight: bold;
     line-height: 1;
-    margin: 0;
-}
-
-.bubble-reserve {
-    justify-content: flex-start;
-    padding-top: 0.58in;
-    padding-bottom: 0.28in;
-    row-gap: 0.05in;
+    margin: 0 0 0.1in 0;
+    display: block;
 }
 
 .reserve-target {
     font-size: 8pt;
-    line-height: 1.08;
+    line-height: 1.2;
     margin: 0;
-    max-width: 1.42in;
+    display: block;
 }
 
 /* Connecting arrows drawn with CSS. The diagram is fixed-position so these are
@@ -205,30 +198,37 @@ body.tcc-report {
 
 /* TCC Specific */
 .tcc-layout {
-    display: block;
     width: 100%;
 }
 
 .retirement-sections {
-    display: flex;
-    gap: 0.1in;
+    width: 100%;
     margin-bottom: 0.08in;
-    align-items: stretch;
+}
+
+.retirement-sections:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .retirement-sections .tcc-section {
-    flex: 1 1 0;
-    margin-bottom: 0;
+    width: 48%;
+    float: left;
+    margin-right: 4%;
+    margin-bottom: 0.08in;
+}
+
+.retirement-sections .tcc-section:nth-child(2n) {
+    margin-right: 0;
 }
 
 .tcc-section {
     border: 1px solid #E3E6EA;
     border-radius: 8px;
     padding: 0.08in 0.1in;
-    margin-bottom: 0.08in;
     display: block;
     overflow: visible;
-    width: 100%;
     box-sizing: border-box;
     page-break-inside: avoid;
 }
@@ -243,11 +243,13 @@ body.tcc-report {
 }
 
 .tcc-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.06in;
     margin-top: 0.03in;
-    align-items: flex-start;
+}
+
+.tcc-grid:after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .account-bubble {
@@ -257,15 +259,40 @@ body.tcc-report {
     padding: 0.08in 0.11in;
     text-align: center;
     width: 1.42in;
-    min-height: 0;
+    float: left;
+    margin: 0 0.06in 0.06in 0;
     box-sizing: border-box;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    row-gap: 0.025in;
-    flex: 0 0 1.42in;
+    display: block;
+}
+
+.account-bubble:nth-child(3n) {
+    margin-right: 0;
+}
+
+.account-bubble .type {
+    font-size: 8pt;
+    color: #6B7280;
+    line-height: 1.2;
+    margin: 0 0 0.05in 0;
+    display: block;
+}
+
+.account-bubble .balance {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #161A1D;
+    line-height: 1.2;
+    margin: 0 0 0.05in 0;
+    display: block;
+}
+
+.account-bubble .cash {
+    font-size: 7.5pt;
+    color: #6B7280;
+    line-height: 1.2;
+    margin: 0;
+    display: block;
 }
 
 .account-bubble .type {
