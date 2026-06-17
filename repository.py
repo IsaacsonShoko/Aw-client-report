@@ -7,18 +7,54 @@ from datetime import date, datetime
 
 load_dotenv()
 
-def get_connection():
-    mysql_url = os.environ.get('MYSQL_URL')
-    if not mysql_url:
-        raise ValueError("MYSQL_URL environment variable is not set")
-        
+def _connection_kwargs_from_url(mysql_url):
     parsed = urlparse(mysql_url)
+    return {
+        'host': parsed.hostname,
+        'port': parsed.port or 3306,
+        'user': parsed.username,
+        'password': parsed.password,
+        'database': parsed.path.lstrip('/'),
+    }
+
+def _get_connection_kwargs():
+    # Support both local development and Railway-provided runtime variables.
+    mysql_url = (
+        os.environ.get('MYSQL_URL')
+        or os.environ.get('MYSQL_PRIVATE_URL')
+        or os.environ.get('MYSQL_PUBLIC_URL')
+        or os.environ.get('DATABASE_URL')
+    )
+    if mysql_url:
+        return _connection_kwargs_from_url(mysql_url)
+
+    host = os.environ.get('MYSQLHOST')
+    user = os.environ.get('MYSQLUSER')
+    password = os.environ.get('MYSQLPASSWORD')
+    database = os.environ.get('MYSQLDATABASE')
+
+    if host and user and password and database:
+        return {
+            'host': host,
+            'port': int(os.environ.get('MYSQLPORT', '3306')),
+            'user': user,
+            'password': password,
+            'database': database,
+        }
+
+    raise ValueError(
+        "MySQL environment variables are not set. Expected MYSQL_URL or "
+        "Railway MYSQLHOST/MYSQLPORT/MYSQLUSER/MYSQLPASSWORD/MYSQLDATABASE."
+    )
+
+def get_connection():
+    kwargs = _get_connection_kwargs()
     return pymysql.connect(
-        host=parsed.hostname,
-        port=parsed.port or 3306,
-        user=parsed.username,
-        password=parsed.password,
-        database=parsed.path.lstrip('/'),
+        host=kwargs['host'],
+        port=kwargs['port'],
+        user=kwargs['user'],
+        password=kwargs['password'],
+        database=kwargs['database'],
         cursorclass=pymysql.cursors.DictCursor,
         autocommit=True
     )
