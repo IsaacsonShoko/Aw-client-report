@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+{% block breadcrumbs %}
+<a href="{{ url_for('clients.list_clients') }}">Clients</a>
+{% if client %}
+<a href="{{ url_for('clients.client_detail', client_id=client.id) }}">{{ client.household_name }}</a>
+<span>{{ "Edit Client" if mode == "edit" else "Create Client" }}</span>
+{% else %}
+<span>Create Client</span>
+{% endif %}
+{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ "Create Client" if mode == "create" else "Edit Client" }}</h1>
+        <p class="muted">Capture the household profile once so quarterly reports can reuse it.</p>
+    </div>
+    <div class="actions-row">
+        <a href="{{ url_for('clients.list_clients') }}" class="btn">Back to Clients</a>
+        {% if client %}
+        <a href="{{ url_for('clients.client_detail', client_id=client.id) }}" class="btn">View Client</a>
+        {% endif %}
+    </div>
+</div>
+
+<form method="POST" id="client-form">
+    <div class="card">
+        <h2>Household</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="household_name">Household Name</label>
+                <input id="household_name" type="text" name="household_name" value="{{ form_data.household_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="marital_status">Marital Status</label>
+                <select id="marital_status" name="marital_status">
+                    <option value="single" {% if form_data.marital_status == "single" %}selected{% endif %}>Single</option>
+                    <option value="married" {% if form_data.marital_status == "married" %}selected{% endif %}>Married</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Client 1</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="client_1_first_name">First Name</label>
+                <input id="client_1_first_name" type="text" name="client_1_first_name" value="{{ form_data.persons.client_1.first_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="client_1_last_name">Last Name</label>
+                <input id="client_1_last_name" type="text" name="client_1_last_name" value="{{ form_data.persons.client_1.last_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="client_1_date_of_birth">Date of Birth</label>
+                <input id="client_1_date_of_birth" type="date" name="client_1_date_of_birth" value="{{ form_data.persons.client_1.date_of_birth }}" required>
+            </div>
+            <div class="form-group">
+                <label for="client_1_ssn_last_four">SSN Last Four</label>
+                <input id="client_1_ssn_last_four" type="text" maxlength="4" name="client_1_ssn_last_four" value="{{ form_data.persons.client_1.ssn_last_four }}" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="client-2-card" {% if form_data.marital_status != "married" %}style="display: none;"{% endif %}>
+        <h2>Client 2</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="client_2_first_name">First Name</label>
+                <input id="client_2_first_name" type="text" name="client_2_first_name" value="{{ form_data.persons.client_2.first_name }}">
+            </div>
+            <div class="form-group">
+                <label for="client_2_last_name">Last Name</label>
+                <input id="client_2_last_name" type="text" name="client_2_last_name" value="{{ form_data.persons.client_2.last_name }}">
+            </div>
+            <div class="form-group">
+                <label for="client_2_date_of_birth">Date of Birth</label>
+                <input id="client_2_date_of_birth" type="date" name="client_2_date_of_birth" value="{{ form_data.persons.client_2.date_of_birth }}">
+            </div>
+            <div class="form-group">
+                <label for="client_2_ssn_last_four">SSN Last Four</label>
+                <input id="client_2_ssn_last_four" type="text" maxlength="4" name="client_2_ssn_last_four" value="{{ form_data.persons.client_2.ssn_last_four }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Static Financial Data</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label for="monthly_salary">Monthly Salary After Tax ($)</label>
+                <input id="monthly_salary" type="number" step="0.01" min="0" name="monthly_salary" value="{{ form_data.monthly_salary }}" required>
+            </div>
+            <div class="form-group">
+                <label for="monthly_expense_budget">Monthly Expense Budget ($)</label>
+                <input id="monthly_expense_budget" type="number" step="0.01" min="0" name="monthly_expense_budget" value="{{ form_data.monthly_expense_budget }}" required>
+            </div>
+            <div class="form-group">
+                <label for="insurance_deductibles">Insurance Deductibles Total ($)</label>
+                <input id="insurance_deductibles" type="number" step="0.01" min="0" name="insurance_deductibles" value="{{ form_data.insurance_deductibles }}" required>
+            </div>
+            <div class="form-group">
+                <label for="reserve_target_override">Reserve Target Override ($, optional)</label>
+                <input id="reserve_target_override" type="number" step="0.01" min="0" name="reserve_target_override" value="{{ form_data.reserve_target_override }}">
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-header">
+            <div>
+                <h2>Accounts</h2>
+                <p class="muted">Use owner `Joint / Household` for non-retirement household accounts.</p>
+            </div>
+            <button type="button" class="btn" id="add-account-btn">Add Account</button>
+        </div>
+        <div id="accounts-container">
+            {% for account in form_data.accounts %}
+            <div class="repeatable-card account-row" data-index="{{ loop.index0 }}">
+                <input type="hidden" name="account_id_{{ loop.index0 }}" value="{{ account.id }}">
+                <div class="grid-3">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="account_category_{{ loop.index0 }}">
+                            <option value="retirement" {% if account.category == "retirement" %}selected{% endif %}>Retirement</option>
+                            <option value="non_retirement" {% if account.category == "non_retirement" %}selected{% endif %}>Non-Retirement</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Owner</label>
+                        <select name="account_owner_{{ loop.index0 }}">
+                            <option value="client_1" {% if account.owner_role == "client_1" %}selected{% endif %}>Client 1</option>
+                            <option value="client_2" {% if account.owner_role == "client_2" %}selected{% endif %}>Client 2</option>
+                            <option value="joint" {% if account.owner_role == "joint" %}selected{% endif %}>Joint / Household</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Investment Account</label>
+                        <label class="checkbox-row">
+                            <input type="checkbox" name="account_is_investment_{{ loop.index0 }}" {% if account.is_investment_account %}checked{% endif %}>
+                            Includes cash balance
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <input type="text" name="account_type_{{ loop.index0 }}" value="{{ account.account_type }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Institution</label>
+                        <input type="text" name="account_institution_{{ loop.index0 }}" value="{{ account.institution }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Four</label>
+                        <input type="text" maxlength="4" name="account_last_four_{{ loop.index0 }}" value="{{ account.account_number_last_four }}">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-danger remove-row-btn">Remove Account</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Trust</h2>
+        <div class="form-group">
+            <label for="trust_property_address">Property Address (optional)</label>
+            <input id="trust_property_address" type="text" name="trust_property_address" value="{{ form_data.trust_property_address }}">
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-header">
+            <div>
+                <h2>Liabilities</h2>
+                <p class="muted">Add mortgages, auto loans, or any other debts shown on the TCC.</p>
+            </div>
+            <button type="button" class="btn" id="add-liability-btn">Add Liability</button>
+        </div>
+        <div id="liabilities-container">
+            {% for liability in form_data.liabilities %}
+            <div class="repeatable-card liability-row" data-index="{{ loop.index0 }}">
+                <input type="hidden" name="liability_id_{{ loop.index0 }}" value="{{ liability.id }}">
+                <div class="grid-3">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <input type="text" name="liability_type_{{ loop.index0 }}" value="{{ liability.liability_type }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Interest Rate (%)</label>
+                        <input type="number" step="0.01" min="0" name="liability_interest_rate_{{ loop.index0 }}" value="{{ liability.interest_rate }}">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" name="liability_description_{{ loop.index0 }}" value="{{ liability.description }}">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-danger remove-row-btn">Remove Liability</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="actions-row">
+        <button type="submit" class="btn btn-primary">{{ "Create Client" if mode == "create" else "Save Changes" }}</button>
+    </div>
+</form>
+
+<template id="account-row-template">
+    <div class="repeatable-card account-row" data-index="__INDEX__">
+        <input type="hidden" name="account_id___INDEX__" value="">
+        <div class="grid-3">
+            <div class="form-group">
+                <label>Category</label>
+                <select name="account_category___INDEX__">
+                    <option value="retirement">Retirement</option>
+                    <option value="non_retirement">Non-Retirement</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Owner</label>
+                <select name="account_owner___INDEX__">
+                    <option value="client_1">Client 1</option>
+                    <option value="client_2">Client 2</option>
+                    <option value="joint">Joint / Household</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Investment Account</label>
+                <label class="checkbox-row">
+                    <input type="checkbox" name="account_is_investment___INDEX__" checked>
+                    Includes cash balance
+                </label>
+            </div>
+            <div class="form-group">
+                <label>Account Type</label>
+                <input type="text" name="account_type___INDEX__" value="">
+            </div>
+            <div class="form-group">
+                <label>Institution</label>
+                <input type="text" name="account_institution___INDEX__" value="">
+            </div>
+            <div class="form-group">
+                <label>Last Four</label>
+                <input type="text" maxlength="4" name="account_last_four___INDEX__" value="">
+            </div>
+        </div>
+        <button type="button" class="btn btn-danger remove-row-btn">Remove Account</button>
+    </div>
+</template>
+
+<template id="liability-row-template">
+    <div class="repeatable-card liability-row" data-index="__INDEX__">
+        <input type="hidden" name="liability_id___INDEX__" value="">
+        <div class="grid-3">
+            <div class="form-group">
+                <label>Type</label>
+                <input type="text" name="liability_type___INDEX__" value="">
+            </div>
+            <div class="form-group">
+                <label>Interest Rate (%)</label>
+                <input type="number" step="0.01" min="0" name="liability_interest_rate___INDEX__" value="">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" name="liability_description___INDEX__" value="">
+            </div>
+        </div>
+        <button type="button" class="btn btn-danger remove-row-btn">Remove Liability</button>
+    </div>
+</template>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const maritalStatus = document.getElementById('marital_status');
+    const client2Card = document.getElementById('client-2-card');
+
+    function toggleClient2() {
+        client2Card.style.display = maritalStatus.value === 'married' ? 'block' : 'none';
+    }
+
+    maritalStatus.addEventListener('change', toggleClient2);
+    toggleClient2();
+
+    function bindRemoveButtons(container) {
+        container.querySelectorAll('.remove-row-btn').forEach((button) => {
+            button.onclick = () => {
+                const row = button.closest('.repeatable-card');
+                if (container.querySelectorAll('.repeatable-card').length > 1) {
+                    row.remove();
+                }
+            };
+        });
+    }
+
+    function setupRepeatableRows(containerId, templateId, addButtonId) {
+        const container = document.getElementById(containerId);
+        const template = document.getElementById(templateId);
+        const addButton = document.getElementById(addButtonId);
+        let nextIndex = container.querySelectorAll('.repeatable-card').length;
+
+        bindRemoveButtons(container);
+
+        addButton.addEventListener('click', () => {
+            const markup = template.innerHTML.replaceAll('__INDEX__', nextIndex);
+            container.insertAdjacentHTML('beforeend', markup);
+            nextIndex += 1;
+            bindRemoveButtons(container);
+        });
+    }
+
+    setupRepeatableRows('accounts-container', 'account-row-template', 'add-account-btn');
+    setupRepeatableRows('liabilities-container', 'liability-row-template', 'add-liability-btn');
+});
+</script>
+{% endblock %}

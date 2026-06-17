@@ -1,11 +1,29 @@
 {% extends "base.html" %}
+{% block breadcrumbs %}
+<a href="{{ url_for('clients.list_clients') }}">Clients</a>
+<a href="{{ url_for('clients.client_detail', client_id=report.client_id) }}">Client Detail</a>
+<a href="{{ url_for('reports.entry', report_id=report_id) }}">{{ report.report_period }}</a>
+<span>Downloads</span>
+{% endblock %}
 {% block content %}
 <div class="card">
-    <h2>Report Generated Successfully</h2>
-    <p>Both SACS and TCC reports are ready to download.</p>
+    <h2>Report Downloads</h2>
+    <p>Select an export format for {{ report.report_period }}.</p>
     <div class="grid-2">
         <a href="{{ url_for('exports.download_sacs', report_id=report_id) }}" class="btn btn-primary" target="_blank">Download SACS PDF</a>
         <a href="{{ url_for('exports.download_tcc', report_id=report_id) }}" class="btn btn-primary" target="_blank">Download TCC PDF</a>
+    </div>
+    <div class="actions-row" style="margin-top: 1rem;">
+        <a href="{{ url_for('exports.download_all', report_id=report_id) }}" class="btn">Download Both As ZIP</a>
+        {% if canva_enabled %}
+        <form action="{{ url_for('exports.export_canva', report_id=report_id) }}" method="POST">
+            <button type="submit" class="btn">Export To Canva</button>
+        </form>
+        {% else %}
+        <button type="button" class="btn btn-muted" disabled>Export To Canva Disabled</button>
+        {% endif %}
+        <a href="{{ url_for('reports.entry', report_id=report_id) }}" class="btn">Back To Report</a>
+        <a href="{{ url_for('clients.client_detail', client_id=report.client_id) }}" class="btn">Back To Client</a>
     </div>
 </div>
 {% endblock %}

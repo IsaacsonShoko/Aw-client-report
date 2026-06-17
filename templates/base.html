@@ -9,8 +9,26 @@
 <body>
     <header>
         <a href="/">AW Client Report Portal</a>
+        <nav class="top-nav">
+            <a href="{{ url_for('clients.list_clients') }}">Clients</a>
+            <a href="{{ url_for('clients.new_client') }}">New Client</a>
+        </nav>
     </header>
     <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% if self.breadcrumbs()|trim %}
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            {% block breadcrumbs %}{% endblock %}
+        </nav>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
     {% block scripts %}{% endblock %}

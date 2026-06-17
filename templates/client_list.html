@@ -1,13 +1,26 @@
 {% extends "base.html" %}
+{% block breadcrumbs %}
+<a href="{{ url_for('clients.list_clients') }}">Clients</a>
+{% endblock %}
 {% block content %}
+<div class="page-header">
+    <div>
+        <h1>Clients</h1>
+        <p class="muted">Manage household profiles and generate quarterly reports.</p>
+    </div>
+    <div class="actions-row">
+        <a href="{{ url_for('clients.new_client') }}" class="btn btn-primary">Add Client</a>
+    </div>
+</div>
+
 <div class="card">
-    <h2>Clients</h2>
     <table>
         <thead>
             <tr>
                 <th>Household</th>
                 <th>Status</th>
                 <th>Last Report</th>
+                <th>Reports</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -17,7 +30,10 @@
                 <td>{{ client.household_name }}</td>
                 <td>{{ client.marital_status | title }}</td>
                 <td>{{ client.last_report_date or 'No reports' }}</td>
+                <td>{{ client.report_count or 0 }}</td>
                 <td>
+                    <a href="{{ url_for('clients.client_detail', client_id=client.id) }}" class="btn">View</a>
+                    <a href="{{ url_for('clients.edit_client', client_id=client.id) }}" class="btn">Edit</a>
                     <form action="{{ url_for('reports.generate', client_id=client.id) }}" method="POST" style="display: inline;">
                         <button type="submit" class="btn btn-primary">Generate Report</button>
                     </form>

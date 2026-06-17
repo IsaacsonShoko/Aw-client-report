@@ -1,13 +1,29 @@
 {% extends "base.html" %}
+{% block breadcrumbs %}
+<a href="{{ url_for('clients.list_clients') }}">Clients</a>
+<a href="{{ url_for('clients.client_detail', client_id=profile.id) }}">{{ profile.household_name }}</a>
+<span>{{ report.report_period }}</span>
+{% endblock %}
 {% block content %}
+<div class="page-header">
+    <div>
+        <h1>Quarterly Report Data Entry</h1>
+        <p class="muted">Client: {{ profile.household_name }} | Period: {{ report.report_period }}</p>
+        {% if previous_values %}
+        <p class="muted">Previous completed report: {{ previous_values.report_period }}</p>
+        {% endif %}
+    </div>
+    <div class="actions-row">
+        <a href="{{ url_for('clients.client_detail', client_id=profile.id) }}" class="btn">Back to Client</a>
+        {% if report.status == 'complete' %}
+        <a href="{{ url_for('exports.download_page', report_id=report.id) }}" class="btn">Downloads</a>
+        {% endif %}
+    </div>
+</div>
 <div class="card">
-    <h2>Quarterly Report Data Entry</h2>
-    <p><strong>Client:</strong> {{ profile.household_name }} | <strong>Period:</strong> {{ report.report_period }}</p>
-    
     <div class="grid-2">
         <div>
             <form method="POST" id="entry-form">
-                
                 <h3>Static Profile Data (Calculated)</h3>
                 <div class="form-group">
                     <label>Monthly Salary (Inflow)</label>
@@ -29,25 +45,58 @@
                 <h3>Dynamic Balances</h3>
                 <div class="form-group">
                     <label>Private Reserve Balance ($)</label>
-                    <input type="number" step="0.01" name="private_reserve_balance" class="highlight calc-input" required>
+                    <div class="value-row">
+                        <input type="number" step="0.01" name="private_reserve_balance" class="highlight calc-input" value="{{ form_values.private_reserve_balance }}" required>
+                        {% if previous_values and previous_values.private_reserve_balance is not none %}
+                        <button type="button" class="btn use-last-btn" data-target="private_reserve_balance" data-value="{{ '%.2f'|format(previous_values.private_reserve_balance / 100) }}">Use Last Value</button>
+                        {% endif %}
+                    </div>
+                    {% if previous_values and previous_values.private_reserve_balance is not none %}
+                    <p class="muted">Last quarter: ${{ '{:,.2f}'.format(previous_values.private_reserve_balance / 100) }}</p>
+                    {% endif %}
                 </div>
                 
                 {% if profile.trust %}
                 <div class="form-group">
                     <label>Trust / Home Value: {{ profile.trust.property_address }} ($)</label>
-                    <input type="number" step="0.01" name="trust_home_value" class="highlight calc-input calc-trust" required>
+                    <div class="value-row">
+                        <input type="number" step="0.01" name="trust_home_value" class="highlight calc-input calc-trust" value="{{ form_values.trust_home_value }}" required>
+                        {% if previous_values and previous_values.trust_home_value is not none %}
+                        <button type="button" class="btn use-last-btn" data-target="trust_home_value" data-value="{{ '%.2f'|format(previous_values.trust_home_value / 100) }}">Use Last Value</button>
+                        {% endif %}
+                    </div>
+                    {% if previous_values and previous_values.trust_home_value is not none %}
+                    <p class="muted">Last quarter: ${{ '{:,.2f}'.format(previous_values.trust_home_value / 100) }}</p>
+                    {% endif %}
                 </div>
                 {% endif %}
 
                 {% for acc in profile.accounts %}
                 <div class="form-group">
                     <label>{{ acc.account_type }} (*{{ acc.account_number_last_four }}) Balance ($)</label>
-                    <input type="number" step="0.01" name="account_{{ acc.id }}_balance" class="highlight calc-input calc-account" data-category="{{ acc.category }}" data-person="{{ acc.person_id or '' }}" required>
+                    <div class="value-row">
+                        <input type="number" step="0.01" name="account_{{ acc.id }}_balance" class="highlight calc-input calc-account" data-category="{{ acc.category }}" data-person="{{ acc.person_id or '' }}" value="{{ form_values.accounts[acc.id].balance }}" required>
+                        {% set previous_account = previous_values.accounts.get(acc.id) if previous_values else None %}
+                        {% if previous_account %}
+                        <button type="button" class="btn use-last-btn" data-target="account_{{ acc.id }}_balance" data-value="{{ '%.2f'|format(previous_account.balance_cents / 100) }}">Use Last Value</button>
+                        {% endif %}
+                    </div>
+                    {% if previous_account %}
+                    <p class="muted">Last quarter: ${{ '{:,.2f}'.format(previous_account.balance_cents / 100) }}</p>
+                    {% endif %}
                 </div>
                 {% if acc.is_investment_account %}
                 <div class="form-group">
                     <label>{{ acc.account_type }} (*{{ acc.account_number_last_four }}) Cash Balance ($)</label>
-                    <input type="number" step="0.01" name="account_{{ acc.id }}_cash" class="highlight calc-input calc-cash" required>
+                    <div class="value-row">
+                        <input type="number" step="0.01" name="account_{{ acc.id }}_cash" class="highlight calc-input calc-cash" value="{{ form_values.accounts[acc.id].cash }}" required>
+                        {% if previous_account and previous_account.cash_balance_cents is not none %}
+                        <button type="button" class="btn use-last-btn" data-target="account_{{ acc.id }}_cash" data-value="{{ '%.2f'|format(previous_account.cash_balance_cents / 100) }}">Use Last Value</button>
+                        {% endif %}
+                    </div>
+                    {% if previous_account and previous_account.cash_balance_cents is not none %}
+                    <p class="muted">Last quarter cash: ${{ '{:,.2f}'.format(previous_account.cash_balance_cents / 100) }}</p>
+                    {% endif %}
                 </div>
                 {% endif %}
                 {% endfor %}
@@ -55,12 +104,22 @@
                 {% for liab in profile.liabilities %}
                 <div class="form-group">
                     <label>{{ liab.liability_type }} Balance ($)</label>
-                    <input type="number" step="0.01" name="liability_{{ liab.id }}_balance" class="highlight calc-input calc-liability" required>
+                    <div class="value-row">
+                        <input type="number" step="0.01" name="liability_{{ liab.id }}_balance" class="highlight calc-input calc-liability" value="{{ form_values.liabilities[liab.id].balance }}" required>
+                        {% set previous_liability = previous_values.liabilities.get(liab.id) if previous_values else None %}
+                        {% if previous_liability %}
+                        <button type="button" class="btn use-last-btn" data-target="liability_{{ liab.id }}_balance" data-value="{{ '%.2f'|format(previous_liability.balance_cents / 100) }}">Use Last Value</button>
+                        {% endif %}
+                    </div>
+                    {% if previous_liability %}
+                    <p class="muted">Last quarter: ${{ '{:,.2f}'.format(previous_liability.balance_cents / 100) }}</p>
+                    {% endif %}
                 </div>
                 {% endfor %}
 
-                <div class="form-group" style="margin-top: 2rem;">
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Save and Generate PDFs</button>
+                <div class="actions-row" style="margin-top: 2rem;">
+                    <button type="submit" name="submit_action" value="draft" class="btn">Save Draft</button>
+                    <button type="submit" name="submit_action" value="complete" class="btn btn-primary">Save and Generate PDFs</button>
                 </div>
             </form>
         </div>
