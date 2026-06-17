@@ -66,11 +66,14 @@ body.tcc-report {
     border-radius: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    row-gap: 0.08in;
     position: absolute;
     text-align: center;
     color: white;
+    box-sizing: border-box;
+    padding: 0.24in 0.18in;
 }
 
 .bubble-inflow {
@@ -98,35 +101,24 @@ body.tcc-report {
 }
 
 .bubble .label {
-    font-size: 15pt;
+    font-size: 13pt;
     font-weight: bold;
-    line-height: 1.1;
-    max-width: 1.9in;
+    line-height: 1.02;
+    max-width: 1.7in;
+    margin: 0;
 }
 
 .bubble .value {
-    font-size: 20pt;
+    font-size: 16pt;
     font-weight: bold;
-    margin-top: 0.12in;
-    line-height: 1.05;
-}
-
-.bubble-reserve .label {
-    font-size: 11pt;
-    line-height: 1.02;
-    max-width: 1.5in;
-}
-
-.bubble-reserve .value {
-    font-size: 15pt;
     line-height: 1;
-    margin-top: 0.09in;
+    margin: 0;
 }
 
 .reserve-target {
     font-size: 8.5pt;
     line-height: 1.05;
-    margin-top: 0.09in;
+    margin: 0;
     max-width: 1.45in;
 }
 
@@ -253,17 +245,18 @@ body.tcc-report {
 .account-bubble {
     background-color: #F5F6F8;
     border: 1px solid #d7dde5;
-    border-radius: 999px;
-    padding: 0.06in 0.08in;
+    border-radius: 12px;
+    padding: 0.08in 0.1in;
     text-align: center;
     width: 1.48in;
-    min-height: 0.6in;
+    min-height: 0;
     box-sizing: border-box;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    row-gap: 0.03in;
 }
 
 .account-bubble .type {
@@ -271,21 +264,22 @@ body.tcc-report {
     color: #6B7280;
     line-height: 1.05;
     max-width: 1.2in;
+    margin: 0;
 }
 
 .account-bubble .balance {
     font-size: 10.5pt;
     font-weight: bold;
     color: #161A1D;
-    margin-top: 0.02in;
     line-height: 1;
+    margin: 0;
 }
 
 .account-bubble .cash {
     font-size: 7.5pt;
     color: #6B7280;
-    margin-top: 0.02in;
     line-height: 1;
+    margin: 0;
 }
 
 .summary-box {
