@@ -21,7 +21,6 @@ def _get_connection_kwargs():
     # Support both local development and Railway-provided runtime variables.
     mysql_url = (
         os.environ.get('MYSQL_URL')
-        or os.environ.get('MYSQL_PRIVATE_URL')
         or os.environ.get('MYSQL_PUBLIC_URL')
         or os.environ.get('DATABASE_URL')
     )
@@ -31,7 +30,7 @@ def _get_connection_kwargs():
     host = os.environ.get('MYSQLHOST')
     user = os.environ.get('MYSQLUSER')
     password = os.environ.get('MYSQLPASSWORD')
-    database = os.environ.get('MYSQLDATABASE')
+    database = os.environ.get('MYSQL_DATABASE') or os.environ.get('MYSQLDATABASE')
 
     if host and user and password and database:
         return {
@@ -44,7 +43,8 @@ def _get_connection_kwargs():
 
     raise ValueError(
         "MySQL environment variables are not set. Expected MYSQL_URL or "
-        "Railway MYSQLHOST/MYSQLPORT/MYSQLUSER/MYSQLPASSWORD/MYSQLDATABASE."
+        "Railway MYSQLHOST/MYSQLPORT/MYSQLUSER/MYSQLPASSWORD/"
+        "MYSQL_DATABASE."
     )
 
 def get_connection():
