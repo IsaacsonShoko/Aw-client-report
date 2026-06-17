@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SACS Report</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='report.css', _external=True) }}">
+    {# Stylesheet is supplied to WeasyPrint via the stylesheets= parameter (loaded from disk). #}
 </head>
 <body>
     <div class="report-header">

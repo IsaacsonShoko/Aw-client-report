@@ -1,4 +1,5 @@
 import io
+import os
 import zipfile
 
 from flask import Blueprint, current_app, flash, redirect, render_template, request, send_file, url_for
@@ -19,7 +20,7 @@ bp = Blueprint("exports", __name__, url_prefix="/exports")
 
 def render_pdf_bytes(html_string, base_url):
     try:
-        from weasyprint import HTML
+        from weasyprint import HTML, CSS
     except OSError as exc:
         # Delay native library loading until PDF generation so the app can boot.
         raise RuntimeError(
@@ -27,7 +28,13 @@ def render_pdf_bytes(html_string, base_url):
             "Install the required Pango/GLib packages for PDF generation."
         ) from exc
 
-    return HTML(string=html_string, base_url=base_url).write_pdf()
+    # Load the report stylesheet from disk and pass it explicitly. Linking it by
+    # external URL fails during rendering: WeasyPrint cannot fetch its own HTTP
+    # endpoint while the single gunicorn worker is busy producing the PDF.
+    css_path = os.path.join(current_app.root_path, "static", "report.css")
+    return HTML(string=html_string, base_url=base_url).write_pdf(
+        stylesheets=[CSS(filename=css_path)]
+    )
 
 
 def _render_sacs_pdf(report_id, base_url):
