@@ -1,6 +1,5 @@
 import io
 from flask import Blueprint, render_template, send_file, request
-from weasyprint import HTML
 import repository
 from calculations import (
     calculate_age,
@@ -12,6 +11,19 @@ from calculations import (
 )
 
 bp = Blueprint('exports', __name__, url_prefix='/exports')
+
+
+def render_pdf_bytes(html_string, base_url):
+    try:
+        from weasyprint import HTML
+    except OSError as exc:
+        # Delay native library loading until PDF generation so the app can boot.
+        raise RuntimeError(
+            "WeasyPrint native libraries are missing on the host. "
+            "Install the required Pango/GLib packages for PDF generation."
+        ) from exc
+
+    return HTML(string=html_string, base_url=base_url).write_pdf()
 
 @bp.route('/<int:report_id>')
 def download_page(report_id):
@@ -70,7 +82,7 @@ def get_report_context(report_id):
 def download_sacs(report_id):
     ctx = get_report_context(report_id)
     html_string = render_template('reports/sacs.html', **ctx)
-    pdf = HTML(string=html_string, base_url=request.url_root).write_pdf()
+    pdf = render_pdf_bytes(html_string, request.url_root)
     
     return send_file(
         io.BytesIO(pdf),
@@ -83,7 +95,7 @@ def download_sacs(report_id):
 def download_tcc(report_id):
     ctx = get_report_context(report_id)
     html_string = render_template('reports/tcc.html', **ctx)
-    pdf = HTML(string=html_string, base_url=request.url_root).write_pdf()
+    pdf = render_pdf_bytes(html_string, request.url_root)
     
     return send_file(
         io.BytesIO(pdf),
