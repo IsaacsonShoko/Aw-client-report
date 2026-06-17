@@ -29,7 +29,7 @@ body.tcc-report {
     page: tcc;
     width: 8.5in;
     min-height: 11in;
-    padding: 0.45in;
+    padding: 0.3in 0.32in;
 }
 
 /* Common Header */
@@ -38,20 +38,20 @@ body.tcc-report {
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #173A5E;
-    padding-bottom: 0.25in;
-    margin-bottom: 0.3in;
+    padding-bottom: 0.16in;
+    margin-bottom: 0.18in;
 }
 
 .report-header h1 {
     color: #173A5E;
     margin: 0;
-    font-size: 24pt;
+    font-size: 21pt;
 }
 
 .report-header .meta {
     text-align: right;
     color: #6B7280;
-    font-size: 14pt;
+    font-size: 11pt;
 }
 
 /* SACS Specific */
@@ -112,19 +112,22 @@ body.tcc-report {
 }
 
 .bubble-reserve .label {
-    font-size: 13pt;
-    max-width: 1.8in;
+    font-size: 11pt;
+    line-height: 1.02;
+    max-width: 1.5in;
 }
 
 .bubble-reserve .value {
-    font-size: 18pt;
+    font-size: 15pt;
+    line-height: 1;
+    margin-top: 0.09in;
 }
 
 .reserve-target {
-    font-size: 10pt;
-    line-height: 1.15;
-    margin-top: 0.08in;
-    max-width: 1.7in;
+    font-size: 8.5pt;
+    line-height: 1.05;
+    margin-top: 0.09in;
+    max-width: 1.45in;
 }
 
 /* Connecting arrows drawn with CSS. The diagram is fixed-position so these are
@@ -207,11 +210,22 @@ body.tcc-report {
     width: 100%;
 }
 
+.retirement-sections {
+    display: flex;
+    gap: 0.1in;
+    margin-bottom: 0.1in;
+}
+
+.retirement-sections .tcc-section {
+    flex: 1 1 0;
+    margin-bottom: 0;
+}
+
 .tcc-section {
     border: 1px solid #E3E6EA;
     border-radius: 8px;
-    padding: 0.16in;
-    margin-bottom: 0.16in;
+    padding: 0.1in 0.11in;
+    margin-bottom: 0.1in;
     display: block;
     overflow: visible;
     width: 100%;
@@ -222,70 +236,77 @@ body.tcc-report {
 .tcc-section h2 {
     color: #173A5E;
     margin-top: 0;
-    font-size: 15pt;
+    font-size: 12pt;
     border-bottom: 1px solid #E3E6EA;
-    padding-bottom: 0.1in;
-    margin-bottom: 0.12in;
+    padding-bottom: 0.05in;
+    margin-bottom: 0.07in;
 }
 
 .tcc-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.08in;
-    margin-top: 0.08in;
+    gap: 0.05in;
+    margin-top: 0.04in;
     align-items: stretch;
 }
 
 .account-bubble {
     background-color: #F5F6F8;
-    border: 1px solid #E3E6EA;
-    border-radius: 4px;
-    padding: 0.07in;
+    border: 1px solid #d7dde5;
+    border-radius: 999px;
+    padding: 0.06in 0.08in;
     text-align: center;
-    width: 1.65in;
-    min-height: 0.82in;
+    width: 1.48in;
+    min-height: 0.6in;
     box-sizing: border-box;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .account-bubble .type {
-    font-size: 9pt;
+    font-size: 7.8pt;
     color: #6B7280;
-    line-height: 1.15;
+    line-height: 1.05;
+    max-width: 1.2in;
 }
 
 .account-bubble .balance {
-    font-size: 12pt;
+    font-size: 10.5pt;
     font-weight: bold;
     color: #161A1D;
-    margin-top: 0.04in;
+    margin-top: 0.02in;
+    line-height: 1;
 }
 
 .account-bubble .cash {
-    font-size: 9pt;
+    font-size: 7.5pt;
     color: #6B7280;
-    margin-top: 0.03in;
+    margin-top: 0.02in;
+    line-height: 1;
 }
 
 .summary-box {
     background-color: #E3E6EA;
-    padding: 0.1in;
+    padding: 0.06in 0.09in;
     border-radius: 4px;
     text-align: right;
-    margin-top: 0.1in;
+    margin-top: 0.06in;
     font-weight: bold;
-    font-size: 12pt;
+    font-size: 10pt;
 }
 
 .client-info-bubble {
     background-color: #16A34A; /* Green per PRD */
     color: white;
-    padding: 0.1in;
+    padding: 0.07in 0.09in;
     border-radius: 4px;
     text-align: left;
-    margin-bottom: 0.1in;
-    font-size: 10pt;
-    line-height: 1.2;
+    margin-bottom: 0.06in;
+    font-size: 8.5pt;
+    line-height: 1.1;
 }
 
 .liabilities-section {
@@ -300,11 +321,11 @@ body.tcc-report {
     background-color: #173A5E;
     color: #ffffff;
     border-radius: 8px;
-    padding: 0.18in 0.22in;
+    padding: 0.11in 0.16in;
     text-align: center;
-    font-size: 18pt;
+    font-size: 14pt;
     font-weight: bold;
-    margin: 0.16in 0;
+    margin: 0.1in 0;
     width: 100%;
     box-sizing: border-box;
     page-break-inside: avoid;

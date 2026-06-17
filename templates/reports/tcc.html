@@ -16,32 +16,34 @@
 
     <div class="tcc-layout">
         <!-- Retirement Accounts (Per Person) -->
-        {% for person in profile.persons %}
-        <div class="tcc-section">
-            <div class="client-info-bubble">
-                <strong>{{ person.first_name }} {{ person.last_name }}</strong> | 
-                Age {{ calculate_age(person.date_of_birth, report.report_date) }} | 
-                SSN: ***-**-{{ person.ssn_last_four }}
-            </div>
-            <h2>{{ person.first_name }} Retirement Accounts</h2>
-            <div class="tcc-grid">
-                {% for acc in profile.accounts %}
-                    {% if acc.category == 'retirement' and acc.person_id == person.id %}
-                    <div class="account-bubble">
-                        <div class="type">{{ acc.account_type }} (*{{ acc.account_number_last_four }})</div>
-                        <div class="balance">${{ '{:,.0f}'.format(balances[acc.id] / 100) }}</div>
-                        {% if acc.is_investment_account and cash_balances[acc.id] is not none %}
-                        <div class="cash">Cash: ${{ '{:,.0f}'.format(cash_balances[acc.id] / 100) }}</div>
+        <div class="retirement-sections">
+            {% for person in profile.persons %}
+            <div class="tcc-section">
+                <div class="client-info-bubble">
+                    <strong>{{ person.first_name }} {{ person.last_name }}</strong> | 
+                    Age {{ calculate_age(person.date_of_birth, report.report_date) }} | 
+                    SSN: ***-**-{{ person.ssn_last_four }}
+                </div>
+                <h2>{{ person.first_name }} Retirement Accounts</h2>
+                <div class="tcc-grid">
+                    {% for acc in profile.accounts %}
+                        {% if acc.category == 'retirement' and acc.person_id == person.id %}
+                        <div class="account-bubble">
+                            <div class="type">{{ acc.account_type }} (*{{ acc.account_number_last_four }})</div>
+                            <div class="balance">${{ '{:,.0f}'.format(balances[acc.id] / 100) }}</div>
+                            {% if acc.is_investment_account and cash_balances[acc.id] is not none %}
+                            <div class="cash">Cash: ${{ '{:,.0f}'.format(cash_balances[acc.id] / 100) }}</div>
+                            {% endif %}
+                        </div>
                         {% endif %}
-                    </div>
-                    {% endif %}
-                {% endfor %}
+                    {% endfor %}
+                </div>
+                <div class="summary-box">
+                    Total: ${{ '{:,.0f}'.format(ret_totals[person.id] / 100) }}
+                </div>
             </div>
-            <div class="summary-box">
-                Total: ${{ '{:,.0f}'.format(ret_totals[person.id] / 100) }}
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
 
         <!-- Non-Retirement Accounts -->
         <div class="tcc-section">
